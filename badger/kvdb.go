@@ -34,15 +34,6 @@ func init() {
 	}
 }
 
-func Close() {
-	err := BadgerDB.Close()
-	if err == nil {
-		log.Println("database closed", "err", err)
-	} else {
-		log.Println("failed to close database", "err", err)
-	}
-}
-
 func Set(key []byte, value []byte) {
 	wb := BadgerDB.NewWriteBatch()
 	defer wb.Cancel()

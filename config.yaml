@@ -1,2 +1,3 @@
 port: 13002
 SECRET_KEY: s9oV39FEtQ4A2cHN3AU2dRFDpegaEVgL
+AdminPWD: admin888

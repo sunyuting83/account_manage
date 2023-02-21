@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"io/ioutil"
 	"math/rand"
@@ -17,6 +19,7 @@ import (
 type Config struct {
 	Port       string `yaml:"port"`
 	SECRET_KEY string `yaml:"SECRET_KEY"`
+	AdminPWD   string `yaml:"AdminPWD"`
 }
 
 // GetCurrentPath Get Current Path
@@ -125,4 +128,12 @@ func GetDateTime() (int64, int64, int64) {
 
 	//返回当天0点和23点59分的时间戳
 	return startTime.Unix(), end.Unix(), yTime.Unix()
+}
+
+func MD5(a string) string {
+	data := []byte(a)
+	md5Ctx := md5.New()
+	md5Ctx.Write(data)
+	cipherStr := md5Ctx.Sum(nil)
+	return hex.EncodeToString(cipherStr)
 }

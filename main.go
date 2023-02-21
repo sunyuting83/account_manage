@@ -1,6 +1,7 @@
 package main
 
 import (
+	BadgerDB "AccountManage/badger"
 	orm "AccountManage/database"
 	"AccountManage/router"
 	"AccountManage/utils"
@@ -28,6 +29,7 @@ func main() {
 	// gin.SetMode(gin.ReleaseMode)
 	gin.SetMode(gin.DebugMode)
 	defer orm.Eloquent.Close()
+	defer BadgerDB.BadgerDB.Close()
 	app := router.InitRouter(confYaml.SECRET_KEY, CurrentPath)
 
 	app.Run(strings.Join([]string{":", confYaml.Port}, ""))

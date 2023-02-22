@@ -60,7 +60,7 @@ func SetWithTTL(key []byte, value []byte, ttl int64) {
 	}
 }
 
-func Get(key []byte) string {
+func Get(key []byte) (string, error) {
 	var ival []byte
 	err := BadgerDB.View(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
@@ -71,9 +71,9 @@ func Get(key []byte) string {
 		return err
 	})
 	if err != nil {
-		log.Println("Failed to read data from the cache.", "key", string(key), "error", err)
+		return "", err
 	}
-	return string(ival)
+	return string(ival), nil
 }
 
 func Has(key []byte) (bool, error) {

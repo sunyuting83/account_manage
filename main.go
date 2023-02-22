@@ -25,7 +25,7 @@ func main() {
 		os.Exit(0)
 	}
 	pwd := utils.MD5(strings.Join([]string{confYaml.AdminPWD, confYaml.SECRET_KEY}, ""))
-	orm.InitDB(pwd)
+	orm.InitDB(pwd, confYaml)
 	// gin.SetMode(gin.ReleaseMode)
 	gin.SetMode(gin.DebugMode)
 	defer orm.Eloquent.Close()

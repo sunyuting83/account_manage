@@ -1,7 +1,9 @@
 package database
 
 import (
+	"AccountManage/utils"
 	"database/sql"
+	"strings"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -14,9 +16,10 @@ var (
 )
 
 // InitDB init db
-func InitDB(pwd string) {
+func InitDB(pwd string, confYaml *utils.Config) {
+	DNString := strings.Join([]string{"host=", confYaml.DBHost, " user=", confYaml.Username, " password=", confYaml.Password, " dbname=", confYaml.DBName, " port=", confYaml.DBProt, " sslmode=disable TimeZone=Asia/Shanghai"}, "")
 	sqlDB, _ = gorm.Open(postgres.New(postgres.Config{
-		DSN:                  "host=192.168.1.90 user=acc_manage password=123456 dbname=acc_manage port=5432 sslmode=disable TimeZone=Asia/Shanghai",
+		DSN:                  DNString,
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
 	}), &gorm.Config{})
 	Eloquent, _ = sqlDB.DB()
@@ -33,6 +36,33 @@ func InitDB(pwd string) {
 		group   *ManageGroups
 		manager *Manager
 		GroupID uint
+		power   = []Power{
+			{TopID: 0,
+				Title:     "系统菜单管理",
+				NewStatus: 0,
+				Api:       "systemenu"},
+			{TopID: 1,
+				Title:     "添加顶级菜单",
+				NewStatus: 1,
+				Api:       "addtopmenu"},
+			{TopID: 1,
+				Title:     "添加下级菜单",
+				NewStatus: 2,
+				Api:       "addsmenu"},
+			{TopID: 1,
+				Title:     "删除下级菜单",
+				NewStatus: 2,
+				Api:       "systemenu"},
+			{TopID: 1,
+				Title:     "添加功能",
+				NewStatus: 3,
+				Api:       "addfunction"},
+			{TopID: 1,
+				Title:     "删除菜单",
+				NewStatus: 3,
+				Api:       "delsystem",
+			},
+		}
 	)
 	if g := sqlDB.First(&group); g.Error != nil {
 		if g.Error.Error() == "record not found" {

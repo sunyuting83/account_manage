@@ -17,9 +17,15 @@ import (
 )
 
 type Config struct {
-	Port       string `yaml:"port"`
-	SECRET_KEY string `yaml:"SECRET_KEY"`
-	AdminPWD   string `yaml:"AdminPWD"`
+	Port        string `yaml:"port"`
+	SECRET_KEY  string `yaml:"SECRET_KEY"`
+	AdminPWD    string `yaml:"AdminPWD"`
+	GlobalToken string `yaml:"GlobalToken"`
+	Username    string `yaml:"Username"`
+	Password    string `yaml:"Password"`
+	DBHost      string `yaml:"DBHost"`
+	DBProt      string `yaml:"DBProt"`
+	DBName      string `yaml:"DBName"`
 }
 
 // GetCurrentPath Get Current Path
@@ -57,6 +63,12 @@ func CheckConfig(OS, CurrentPath string) (conf *Config, err error) {
 	if len(confYaml.SECRET_KEY) <= 0 {
 		secret_key := randSeq(32)
 		confYaml.SECRET_KEY = secret_key
+		config, _ := yaml.Marshal(&confYaml)
+		ioutil.WriteFile(ConfigFile, config, 0644)
+	}
+	if len(confYaml.GlobalToken) <= 0 {
+		GlobalToken := randSeq(32)
+		confYaml.GlobalToken = GlobalToken
 		config, _ := yaml.Marshal(&confYaml)
 		ioutil.WriteFile(ConfigFile, config, 0644)
 	}

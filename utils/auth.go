@@ -12,7 +12,7 @@ import (
 )
 
 // VerifyMiddleware Verify middleware
-func VerifyMiddleware() gin.HandlerFunc {
+func AdminVerifyMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
 		if len(token) > 67 {
@@ -36,7 +36,7 @@ func CheckToken(s, a string) bool {
 	if err != nil {
 		return false
 	}
-	token := BadgerDB.Get(AEStoken)
+	token, err := BadgerDB.Get(AEStoken)
 	if err != nil {
 		return false
 	}

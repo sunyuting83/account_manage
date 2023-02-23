@@ -18,6 +18,12 @@ func InitRouter(SECRET_KEY, CurrentPath string) *gin.Engine {
 	adminapiv1.Use(utils.SetConfigMiddleWare(SECRET_KEY, CurrentPath))
 	{
 		router.GET("/", controller.Index)
+		adminapiv1.POST("/addadmin", utils.AdminVerifyMiddleware(), Admin.AddAdmin)
+		adminapiv1.PUT("/repassword", utils.AdminVerifyMiddleware(), Admin.ResetPassword)
+		adminapiv1.DELETE("/deladmin", utils.AdminVerifyMiddleware(), Admin.DeleteAdmin)
+		adminapiv1.GET("/checklogin", utils.AdminVerifyMiddleware(), Admin.CheckLogin)
+		adminapiv1.GET("/adminlist", utils.AdminVerifyMiddleware(), Admin.AdminList)
+		adminapiv1.PUT("/upstatus", utils.AdminVerifyMiddleware(), Admin.UpStatusAdmin)
 		adminapiv1.POST("/loginadmin", Admin.Sgin)
 		adminapiv1.GET("/aaa", utils.AdminVerifyMiddleware(), controller.Index)
 	}

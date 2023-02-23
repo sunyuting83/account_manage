@@ -30,58 +30,18 @@ func InitDB(pwd string, confYaml *utils.Config) {
 
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	Eloquent.SetConnMaxLifetime(time.Hour)
-	sqlDB.AutoMigrate(&Users{}, &Projects{}, &Accounts{}, &Filed{}, &ManageGroups{}, &Manager{}, &Power{})
+	sqlDB.AutoMigrate(&Users{}, &Projects{}, &Accounts{}, &Filed{}, &Manager{})
 
 	var (
-		group   *ManageGroups
 		manager *Manager
-		GroupID uint
-		power   = []Power{
-			{TopID: 0,
-				Title:     "系统菜单管理",
-				NewStatus: 0,
-				Api:       "systemenu"},
-			{TopID: 1,
-				Title:     "添加顶级菜单",
-				NewStatus: 1,
-				Api:       "addtopmenu"},
-			{TopID: 1,
-				Title:     "添加下级菜单",
-				NewStatus: 2,
-				Api:       "addsmenu"},
-			{TopID: 1,
-				Title:     "删除下级菜单",
-				NewStatus: 2,
-				Api:       "systemenu"},
-			{TopID: 1,
-				Title:     "添加功能",
-				NewStatus: 3,
-				Api:       "addfunction"},
-			{TopID: 1,
-				Title:     "删除菜单",
-				NewStatus: 3,
-				Api:       "delsystem",
-			},
-		}
 	)
-	if g := sqlDB.First(&group); g.Error != nil {
-		if g.Error.Error() == "record not found" {
-			u := ManageGroups{
-				Title: "超级管理组",
-				Power: "",
-			}
-			sqlDB.Create(&u)
-			GroupID = u.ID
-		}
-	}
 
 	if m := sqlDB.First(&manager); m.Error != nil {
 		if m.Error.Error() == "record not found" {
 			u := Manager{
-				ManageGroupsID: GroupID,
-				UserName:       "admin",
-				Password:       pwd,
-				NewStatus:      0,
+				UserName:  "admin",
+				Password:  pwd,
+				NewStatus: 0,
 			}
 			sqlDB.Create(&u)
 		}

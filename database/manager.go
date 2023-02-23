@@ -1,13 +1,12 @@
 package database
 
 type Manager struct {
-	ID             uint `gorm:"primaryKey"`
-	ManageGroupsID uint
-	UserName       string `gorm:"index"`
-	Password       string
-	NewStatus      int   `gorm:"index"`
-	CreatedAt      int64 `gorm:"autoUpdateTime:milli"`
-	UpdatedAt      int64 `gorm:"autoUpdateTime:milli"`
+	ID        uint   `gorm:"primaryKey"`
+	UserName  string `gorm:"index"`
+	Password  string
+	NewStatus int   `gorm:"index"`
+	CreatedAt int64 `gorm:"autoUpdateTime:milli"`
+	UpdatedAt int64 `gorm:"autoUpdateTime:milli"`
 }
 
 func CheckAdminLogin(username, password string) (manager *Manager, err error) {

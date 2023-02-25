@@ -37,7 +37,7 @@ func UpStatusUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  0,
-		"message": strings.Join([]string{"成功", FuckStr, "管理员"}, ""),
+		"message": strings.Join([]string{"成功", FuckStr, "用户"}, ""),
 		"user":    user,
 	})
 }

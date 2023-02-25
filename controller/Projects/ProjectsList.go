@@ -20,7 +20,7 @@ func ProjectsList(c *gin.Context) {
 		})
 		return
 	}
-	dataList, err := database.GetUsersList(pageInt)
+	dataList, err := database.GetProjectsList(pageInt)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  1,

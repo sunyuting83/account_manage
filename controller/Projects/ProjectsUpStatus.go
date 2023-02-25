@@ -36,8 +36,8 @@ func UpStatusProjects(c *gin.Context) {
 	projects.UpStatusProjects(NewStatus)
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":  0,
-		"message": strings.Join([]string{"成功", FuckStr, "后台"}, ""),
-		"user":    projects,
+		"status":   0,
+		"message":  strings.Join([]string{"成功", FuckStr, "后台"}, ""),
+		"projects": projects,
 	})
 }

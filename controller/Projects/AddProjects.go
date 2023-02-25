@@ -9,9 +9,8 @@ import (
 )
 
 type Projects struct {
-	UsersID      string
-	ProjectsName string
-	NewStatus    string
+	UsersID      string `form:"usersid" json:"usersid" xml:"usersid"  binding:"required"`
+	ProjectsName string `form:"ProjectsName" json:"ProjectsName" xml:"ProjectsName"  binding:"required"`
 }
 
 func AddProjects(c *gin.Context) {
@@ -38,38 +37,14 @@ func AddProjects(c *gin.Context) {
 		})
 		return
 	}
-	if len(form.NewStatus) < 0 {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"status":  1,
-			"message": "haven't status",
-		})
-		return
-	}
-
-	user, err := database.UserCheckUserName(form.ProjectsName)
-	if err != nil && err.Error() != "record not found" {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  1,
-			"message": err.Error(),
-		})
-		return
-	}
-	if len(user.UserName) > 0 {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  1,
-			"message": "用户名已存在",
-		})
-		return
-	}
-	UsersIDInt := StrToUInt(form.UsersID)
-	NewStatusInt, _ := strconv.Atoi(form.NewStatus)
 	var projects *database.Projects
+	UsersIDInt := StrToUInt(form.UsersID)
 	projects = &database.Projects{
 		UsersID:      UsersIDInt,
 		ProjectsName: form.ProjectsName,
-		NewStatus:    NewStatusInt,
+		NewStatus:    0,
 	}
-	err = projects.Insert()
+	err := projects.Insert()
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  1,
@@ -81,7 +56,7 @@ func AddProjects(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  0,
 		"message": "添加成功",
-		"data":    user,
+		"data":    projects,
 	})
 }
 

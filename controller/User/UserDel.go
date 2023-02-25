@@ -31,7 +31,7 @@ func DeleteUser(c *gin.Context) {
 	user.DeleteOne(form.ID)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  0,
-		"message": "成功删除管理员",
+		"message": "成功删除用户",
 		"id":      user.ID,
 	})
 }

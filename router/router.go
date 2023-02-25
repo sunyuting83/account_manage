@@ -3,6 +3,7 @@ package router
 import (
 	"AccountManage/controller"
 	Admin "AccountManage/controller/Admin"
+	User "AccountManage/controller/User"
 	utils "AccountManage/utils"
 
 	"github.com/gin-gonic/gin"
@@ -25,6 +26,11 @@ func InitRouter(SECRET_KEY, CurrentPath string) *gin.Engine {
 		adminapiv1.GET("/adminlist", utils.AdminVerifyMiddleware(), Admin.AdminList)
 		adminapiv1.PUT("/upstatus", utils.AdminVerifyMiddleware(), Admin.UpStatusAdmin)
 		adminapiv1.POST("/loginadmin", Admin.Sgin)
+		adminapiv1.POST("/adduser", utils.AdminVerifyMiddleware(), User.AddUser)
+		adminapiv1.PUT("/userrepassword", utils.AdminVerifyMiddleware(), User.UserResetPassword)
+		adminapiv1.DELETE("/deluser", utils.AdminVerifyMiddleware(), User.DeleteUser)
+		adminapiv1.GET("/userlist", utils.AdminVerifyMiddleware(), User.UsersList)
+		adminapiv1.PUT("/userupstatus", utils.AdminVerifyMiddleware(), User.UpStatusAdmin)
 		adminapiv1.GET("/aaa", utils.AdminVerifyMiddleware(), controller.Index)
 	}
 

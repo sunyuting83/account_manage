@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpStatusAdmin(c *gin.Context) {
-	var form User
+func UpStatusUser(c *gin.Context) {
+	var form ProjectsID
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  1,
@@ -17,7 +17,7 @@ func UpStatusAdmin(c *gin.Context) {
 		})
 		return
 	}
-	user, err := database.CheckID(form.ID)
+	projects, err := database.ProjectsCheckID(form.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  1,
@@ -29,15 +29,15 @@ func UpStatusAdmin(c *gin.Context) {
 		NewStatus int    = 1
 		FuckStr   string = "锁定"
 	)
-	if user.NewStatus == 1 {
+	if projects.NewStatus == 1 {
 		NewStatus = 0
 		FuckStr = "解锁"
 	}
-	user.UpStatusAdmin(NewStatus)
+	projects.UpStatusProjects(NewStatus)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  0,
-		"message": strings.Join([]string{"成功", FuckStr, "管理员"}, ""),
-		"user":    user,
+		"message": strings.Join([]string{"成功", FuckStr, "后台"}, ""),
+		"user":    projects,
 	})
 }

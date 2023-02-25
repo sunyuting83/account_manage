@@ -46,7 +46,7 @@ func (user *Users) GetCount() (count int64, err error) {
 }
 
 // Admin List
-func GetUsersList(page int) (user *Users, err error) {
+func GetUsersList(page int) (user *[]Users, err error) {
 	p := makePage(page)
 	if err = sqlDB.
 		Select("id, user_name, new_status, created_at").

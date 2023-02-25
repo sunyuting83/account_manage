@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpStatusAdmin(c *gin.Context) {
+func UpStatusProjects(c *gin.Context) {
 	var form UserID
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -38,6 +38,6 @@ func UpStatusAdmin(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  0,
 		"message": strings.Join([]string{"成功", FuckStr, "管理员"}, ""),
-		"user":    NewStatus,
+		"user":    user,
 	})
 }

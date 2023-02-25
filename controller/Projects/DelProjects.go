@@ -3,13 +3,16 @@ package controller
 import (
 	"AccountManage/database"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
-func UpStatusAdmin(c *gin.Context) {
-	var form User
+type ProjectsID struct {
+	ID int64 `form:"id" json:"id" xml:"id"  binding:"required"`
+}
+
+func DeleteProjects(c *gin.Context) {
+	var form ProjectsID
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  1,
@@ -17,7 +20,7 @@ func UpStatusAdmin(c *gin.Context) {
 		})
 		return
 	}
-	user, err := database.CheckID(form.ID)
+	Projects, err := database.ProjectsCheckID(form.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  1,
@@ -25,19 +28,10 @@ func UpStatusAdmin(c *gin.Context) {
 		})
 		return
 	}
-	var (
-		NewStatus int    = 1
-		FuckStr   string = "锁定"
-	)
-	if user.NewStatus == 1 {
-		NewStatus = 0
-		FuckStr = "解锁"
-	}
-	user.UpStatusAdmin(NewStatus)
-
+	Projects.DeleteOne(form.ID)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  0,
-		"message": strings.Join([]string{"成功", FuckStr, "管理员"}, ""),
-		"user":    user,
+		"message": "成功删除后台",
+		"id":      Projects.ID,
 	})
 }

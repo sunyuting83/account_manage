@@ -2,6 +2,7 @@ package router
 
 import (
 	"AccountManage/controller"
+	Account "AccountManage/controller/Account"
 	Admin "AccountManage/controller/Admin"
 	Projects "AccountManage/controller/Projects"
 	User "AccountManage/controller/User"
@@ -35,6 +36,7 @@ func InitRouter(SECRET_KEY, CurrentPath string) *gin.Engine {
 		adminapiv1.DELETE("/DelProjects", utils.AdminVerifyMiddleware(), Projects.DeleteProjects)
 		adminapiv1.GET("/ProjectsList", utils.AdminVerifyMiddleware(), Projects.ProjectsList)
 		adminapiv1.PUT("/UpStatusProjects", utils.AdminVerifyMiddleware(), Projects.UpStatusProjects)
+		adminapiv1.GET("/AccountList", utils.AdminVerifyMiddleware(), Account.AccountList)
 	}
 
 	return router

@@ -19,3 +19,23 @@ type Accounts struct {
 	CreatedAt     int64 `gorm:"autoUpdateTime:milli"`
 	UpdatedAt     int64 `gorm:"autoUpdateTime:milli"`
 }
+
+// Get Count
+func (accounts *Accounts) GetCount(ProjectsID string) (count int64, err error) {
+	if err = sqlDB.Model(&accounts).Where("projects_id = ?", ProjectsID).Count(&count).Error; err != nil {
+		return
+	}
+	return
+}
+
+// Account List
+func GetAccountList(page int) (accounts *[]Accounts, err error) {
+	p := makePage(page)
+	if err = sqlDB.
+		Order("updated_at desc").
+		Limit(100).Offset(p).
+		Find(&accounts).Error; err != nil {
+		return
+	}
+	return
+}

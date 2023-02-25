@@ -13,9 +13,7 @@ import (
 func InitRouter(SECRET_KEY, CurrentPath string) *gin.Engine {
 	router := gin.Default()
 	router.Use(utils.CORSMiddleware())
-	apiv1 := router.Group("/api/v1")
 	adminapiv1 := router.Group("/admin/api/v1")
-	apiv1.Use(utils.SetConfigMiddleWare(SECRET_KEY, CurrentPath))
 	adminapiv1.Use(utils.SetConfigMiddleWare(SECRET_KEY, CurrentPath))
 	{
 		router.GET("/", controller.Index)
@@ -30,7 +28,7 @@ func InitRouter(SECRET_KEY, CurrentPath string) *gin.Engine {
 		adminapiv1.PUT("/userrepassword", utils.AdminVerifyMiddleware(), User.UserResetPassword)
 		adminapiv1.DELETE("/deluser", utils.AdminVerifyMiddleware(), User.DeleteUser)
 		adminapiv1.GET("/userlist", utils.AdminVerifyMiddleware(), User.UsersList)
-		adminapiv1.PUT("/userupstatus", utils.AdminVerifyMiddleware(), User.UpStatusAdmin)
+		adminapiv1.PUT("/userupstatus", utils.AdminVerifyMiddleware(), User.UpStatusUser)
 		adminapiv1.GET("/aaa", utils.AdminVerifyMiddleware(), controller.Index)
 	}
 

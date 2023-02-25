@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpStatusUser(c *gin.Context) {
+func UpStatusProjects(c *gin.Context) {
 	var form ProjectsID
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

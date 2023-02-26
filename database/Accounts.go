@@ -3,6 +3,7 @@ package database
 type Accounts struct {
 	ID            uint `gorm:"primaryKey"`
 	ProjectsID    uint
+	ComputID      uint
 	UserName      string
 	Password      string
 	Cover         string

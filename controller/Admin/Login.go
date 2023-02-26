@@ -4,7 +4,6 @@ import (
 	BadgerDB "AccountManage/badger"
 	"AccountManage/database"
 	"AccountManage/utils"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -21,7 +20,7 @@ type Login struct {
 func Sgin(c *gin.Context) {
 	var form Login
 	if err := c.ShouldBind(&form); err != nil {
-		fmt.Println(form.UserName, form.Password)
+		// fmt.Println(form.UserName, form.Password)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  1,
 			"message": err.Error(),

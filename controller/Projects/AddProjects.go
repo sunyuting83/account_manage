@@ -1,9 +1,14 @@
 package controller
 
 import (
+	BadgerDB "AccountManage/badger"
 	"AccountManage/database"
+	"AccountManage/utils"
+	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +16,11 @@ import (
 type Projects struct {
 	UsersID      string `form:"usersid" json:"usersid" xml:"usersid"  binding:"required"`
 	ProjectsName string `form:"ProjectsName" json:"ProjectsName" xml:"ProjectsName"  binding:"required"`
+}
+
+type CacheValue struct {
+	UsersID    string `json:"UsersID"`
+	ProjectsID string `json:"ProjectsID"`
 }
 
 func AddProjects(c *gin.Context) {
@@ -23,7 +33,7 @@ func AddProjects(c *gin.Context) {
 		return
 	}
 
-	if len(form.UsersID) < 0 {
+	if len(form.UsersID) != 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status":  1,
 			"message": "haven't userid",
@@ -52,6 +62,23 @@ func AddProjects(c *gin.Context) {
 		})
 		return
 	}
+
+	projectsIDInt := strconv.Itoa(int(projects.ID))
+	projectsIDStr := string(projectsIDInt)
+	d := time.Now()
+	date := d.Format("2006-01-02_15:04:05")
+	key := utils.MD5(strings.Join([]string{form.UsersID, date, projectsIDStr}, ""))
+	key = key[:12]
+
+	cache := &CacheValue{
+		UsersID:    form.UsersID,
+		ProjectsID: projectsIDStr,
+	}
+	CacheValues, _ := json.Marshal(&cache)
+
+	BadgerDB.Set([]byte(key), CacheValues)
+
+	projects.UpProjectsKey(key)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  0,

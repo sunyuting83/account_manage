@@ -7,6 +7,7 @@ type Projects struct {
 	NewStatus    int `gorm:"index"`
 	Accounts     []Accounts
 	Filed        []Filed
+	Key          string
 	CreatedAt    int64 `gorm:"autoUpdateTime:milli"`
 	UpdatedAt    int64 `gorm:"autoUpdateTime:milli"`
 }
@@ -54,4 +55,9 @@ func (projects *Projects) DeleteOne(id int64) {
 // Reset Password
 func (projects *Projects) UpStatusProjects(status int) {
 	sqlDB.Model(&projects).Update("new_status", status)
+}
+
+// Reset Password
+func (projects *Projects) UpProjectsKey(key string) {
+	sqlDB.Model(&projects).Update("key", key)
 }

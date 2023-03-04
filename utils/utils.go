@@ -17,15 +17,20 @@ import (
 )
 
 type Config struct {
-	Port        string `yaml:"port"`
-	SECRET_KEY  string `yaml:"SECRET_KEY"`
-	AdminPWD    string `yaml:"AdminPWD"`
-	GlobalToken string `yaml:"GlobalToken"`
-	Username    string `yaml:"Username"`
-	Password    string `yaml:"Password"`
-	DBHost      string `yaml:"DBHost"`
-	DBProt      string `yaml:"DBProt"`
-	DBName      string `yaml:"DBName"`
+	Port        string   `yaml:"port"`
+	SECRET_KEY  string   `yaml:"SECRET_KEY"`
+	AdminPWD    string   `yaml:"AdminPWD"`
+	GlobalToken string   `yaml:"GlobalToken"`
+	Username    string   `yaml:"Username"`
+	Password    string   `yaml:"Password"`
+	Database    Database `yaml:"Database"`
+}
+
+type Database struct {
+	DBType string `yaml:"DBType"`
+	DBHost string `yaml:"DBHost"`
+	DBProt string `yaml:"DBProt"`
+	DBName string `yaml:"DBName"`
 }
 
 // GetCurrentPath Get Current Path

@@ -3,10 +3,13 @@ package database
 import (
 	"AccountManage/utils"
 	"database/sql"
+	"os"
 	"strings"
 	"time"
 
+	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -17,11 +20,7 @@ var (
 
 // InitDB init db
 func InitDB(pwd string, confYaml *utils.Config) {
-	DNString := strings.Join([]string{"host=", confYaml.DBHost, " user=", confYaml.Username, " password=", confYaml.Password, " dbname=", confYaml.DBName, " port=", confYaml.DBProt, " sslmode=disable TimeZone=Asia/Shanghai"}, "")
-	sqlDB, _ = gorm.Open(postgres.New(postgres.Config{
-		DSN:                  DNString,
-		PreferSimpleProtocol: true, // disables implicit prepared statement usage
-	}), &gorm.Config{})
+	GetDB(confYaml)
 	Eloquent, _ = sqlDB.DB()
 	Eloquent.SetMaxIdleConns(10)
 
@@ -45,5 +44,35 @@ func InitDB(pwd string, confYaml *utils.Config) {
 			}
 			sqlDB.Create(&u)
 		}
+	}
+}
+
+func GetDB(confYaml *utils.Config) {
+	switch confYaml.Database.DBType {
+	case "pgsql":
+		DNString := strings.Join([]string{"host=", confYaml.Database.DBHost, " user=", confYaml.Username, " password=", confYaml.Password, " dbname=", confYaml.Database.DBName, " port=", confYaml.Database.DBProt, " sslmode=disable TimeZone=Asia/Shanghai"}, "")
+		sqlDB, _ = gorm.Open(postgres.New(postgres.Config{
+			DSN:                  DNString,
+			PreferSimpleProtocol: true, // disables implicit prepared statement usage
+		}), &gorm.Config{})
+	case "mysql":
+		DNString := strings.Join([]string{confYaml.Username, ":", confYaml.Password, "@tcp(", confYaml.Database.DBHost, ":", confYaml.Database.DBProt, ")/", confYaml.Database.DBName, "?charset=utf8&parseTime=True&loc=Local"}, "")
+		sqlDB, _ = gorm.Open(mysql.New(mysql.Config{
+			DSN:                       DNString, // DSN data source name
+			DefaultStringSize:         256,
+			DisableDatetimePrecision:  true,
+			DontSupportRenameIndex:    true,
+			DontSupportRenameColumn:   true,
+			SkipInitializeWithVersion: false,
+		}), &gorm.Config{})
+	case "sqlite":
+		CurrentPath, _ := utils.GetCurrentPath()
+		dbPath := strings.Join([]string{CurrentPath, "db"}, "/")
+		if !utils.IsExist(dbPath) {
+			os.MkdirAll(dbPath, 0755)
+		}
+		dbName := strings.Join([]string{confYaml.Database.DBName, "db"}, ".")
+		dbFile := strings.Join([]string{dbPath, dbName}, "/")
+		sqlDB, _ = gorm.Open(sqlite.Open(dbFile), &gorm.Config{})
 	}
 }

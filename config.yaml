@@ -2,8 +2,10 @@ port: 13002
 SECRET_KEY: s9oV39FEtQ4A2cHN3AU2dRFDpegaEVgL
 AdminPWD: admin888
 GlobalToken: UG7dMgu8DHHPROedVQVBcLetLbnfkTqI
-Username: acc_manage
-Password: 123456
-DBHost: 192.168.1.90
-DBProt: 5432
-DBName: acc_manage
+Database:
+  Username: acc_manage
+  Password: 
+  DBType: sqlite
+  DBHost: 192.168.1.90
+  DBProt: 5432
+  DBName: acc_manage
